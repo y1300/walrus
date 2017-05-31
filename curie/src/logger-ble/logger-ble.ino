@@ -33,12 +33,20 @@ void setup() {
   azCharacteristic.setValue(0.0);
   
   blePeripheral.begin();
+
+  /* Initialise the builtn LED to blink and indicate activity */
+  pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
+  /* While running but not connected, leave LED on */
+  digitalWrite(LED_BUILTIN, HIGH);
   BLECentral central = blePeripheral.central();
 
   while (central.connected()) {
+    /* Blink the LED while connected*/
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    
     CurieIMU.readAccelerometer(ax, ay, az);
     axCharacteristic.setValue(ax);
     ayCharacteristic.setValue(ay);
