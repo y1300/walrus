@@ -3,12 +3,12 @@
 
 BLEPeripheral blePeripheral;
 BLEService accelerometerService("19B10010-E8F2-537E-4F6C-D104768A1214");
-BLEFloatCharacteristic axCharacteristic("19B10011-E8F2-537E-4F6C-D104768A1214", BLERead);
-BLEFloatCharacteristic ayCharacteristic("19B10100-E8F2-537E-4F6C-D104768A1214", BLERead);
-BLEFloatCharacteristic azCharacteristic("19B10101-E8F2-537E-4F6C-D104768A1214", BLERead);
-
+BLECharacteristic accelerometerCharacteristic("19B10011-E8F2-537E-4F6C-D104768A1214", BLERead, 6);
 unsigned long readingInterval = 75;  // Time between readings when logging
+
 int ax, ay, az; // Accelerometer values
+
+char accelerometerByteArray[6];
 
 void setup() {
   
@@ -24,13 +24,8 @@ void setup() {
   blePeripheral.setAdvertisedServiceUuid(accelerometerService.uuid());
 
   blePeripheral.addAttribute(accelerometerService);
-  blePeripheral.addAttribute(axCharacteristic);
-  blePeripheral.addAttribute(ayCharacteristic);
-  blePeripheral.addAttribute(azCharacteristic);
-
-  axCharacteristic.setValue(0.0);
-  ayCharacteristic.setValue(0.0);
-  azCharacteristic.setValue(0.0);
+  blePeripheral.addAttribute(accelerometerCharacteristic);
+  accelerometerCharacteristic.setValue("000000");
   
   blePeripheral.begin();
 
@@ -48,9 +43,14 @@ void loop() {
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
     
     CurieIMU.readAccelerometer(ax, ay, az);
-    axCharacteristic.setValue(ax);
-    ayCharacteristic.setValue(ay);
-    azCharacteristic.setValue(az);
+    accelerometerByteArray[0] = lowByte(ax);
+    accelerometerByteArray[1] = highByte(ax);
+    accelerometerByteArray[2] = lowByte(ay);
+    accelerometerByteArray[3] = highByte(ay);
+    accelerometerByteArray[4] = lowByte(az);
+    accelerometerByteArray[5] = highByte(az);
+    
+    accelerometerCharacteristic.setValue(accelerometerByteArray);
     delay(readingInterval);
   }
 }
