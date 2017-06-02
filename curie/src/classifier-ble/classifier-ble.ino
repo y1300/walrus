@@ -5,7 +5,7 @@
 
 BLEPeripheral blePeripheral;
 BLEService accelerometerService("20A10010-E8F2-537E-4F6C-D104768A1214");
-BLEFloatCharacteristic accelerometerCharacteristic("20A10011-E8F2-537E-4F6C-D104768A1214", BLERead);
+BLEFloatCharacteristic accelerometerCharacteristic("20A10011-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify);
 
 bool moving = false;                
 bool calibrateOffsets = true;
@@ -203,6 +203,8 @@ void classifyMovement() {
       Serial.print(result[i]); Serial.print(" ");
     }
     Serial.println("");
+    accelerometerCharacteristic.setValue(result[0]);
+    
   } else {
     Serial.println("Too few readings to normalise, not classifying");
   }
