@@ -4,8 +4,8 @@
 #include "network-arduino.hpp"
 
 BLEPeripheral blePeripheral;
-BLEService accelerometerService("20A10010-E8F2-537E-4F6C-D104768A1214");
-BLEFloatCharacteristic accelerometerCharacteristic("20A10011-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify);
+BLEService classifierService("20A10010-E8F2-537E-4F6C-D104768A1214");
+BLEFloatCharacteristic classifierCharacteristic("20A10011-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify);
 
 bool moving = false;                
 bool calibrateOffsets = true;
@@ -54,12 +54,12 @@ void setup() {
   while(!Serial) ;    // wait for serial port to connect.
   
   /* Initialise the BLE service */
-  blePeripheral.setLocalName("ExerciseLogger");
-  blePeripheral.setAdvertisedServiceUuid(accelerometerService.uuid());
+  blePeripheral.setLocalName("ExerciseClassifieracce");
+  blePeripheral.setAdvertisedServiceUuid(classifierService.uuid());
 
-  blePeripheral.addAttribute(accelerometerService);
-  blePeripheral.addAttribute(accelerometerCharacteristic);
-  accelerometerCharacteristic.setValue(0.0);
+  blePeripheral.addAttribute(classifierService);
+  blePeripheral.addAttribute(classifierCharacteristic);
+  classifierCharacteristic.setValue(0.0);
   
   blePeripheral.begin();
 
@@ -203,7 +203,7 @@ void classifyMovement() {
       Serial.print(result[i]); Serial.print(" ");
     }
     Serial.println("");
-    accelerometerCharacteristic.setValue(result[0]);
+    classifierCharacteristic.setValue(result[0]);
     
   } else {
     Serial.println("Too few readings to normalise, not classifying");

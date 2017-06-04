@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.UUID;
@@ -111,6 +112,12 @@ public class BluetoothLeService extends Service {
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
+            Context context = getApplicationContext();
+            CharSequence text = "Classification changed";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
     };
 
@@ -294,6 +301,11 @@ public class BluetoothLeService extends Service {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return;
         }
+
+        if (characteristic == null) {
+            Log.w(TAG, "Characteristic is null");
+            return;
+        }
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
 
         // This is specific to Heart Rate Measurement.
@@ -315,5 +327,49 @@ public class BluetoothLeService extends Service {
         if (mBluetoothGatt == null) return null;
 
         return mBluetoothGatt.getServices();
+    }
+
+    public void readClassification() {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return;
+        }
+        /*check if the service is available on the device*/
+        BluetoothGattService mClassifierService = mBluetoothGatt.getService(UUID.fromString("20A10010-E8F2-537E-4F6C-D104768A1214"));
+        if(mClassifierService == null){
+            Log.w(TAG, "Custom BLE Service not found");
+            return;
+        }
+        /*get the read characteristic from the service*/
+        BluetoothGattCharacteristic mReadClassification = mClassifierService.getCharacteristic(UUID.fromString("20A10011-E8F2-537E-4F6C-D104768A1214"));
+        if(!mBluetoothGatt.readCharacteristic(mReadClassification)){
+            Log.w(TAG, "Failed to read characteristic");
+        }
+        Context context = getApplicationContext();
+        CharSequence text = "Read Characteristic";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+        broadcastUpdate(ACTION_DATA_AVAILABLE, mReadClassification);
+    }
+
+    public BluetoothGattCharacteristic getClassifierCharacteristic() {
+        if (mBluetoothAdapter == null || mBluetoothGatt == null) {
+            Log.w(TAG, "BluetoothAdapter not initialized");
+            return null;
+        }
+        /*check if the service is available on the device*/
+        BluetoothGattService mClassifierService = mBluetoothGatt.getService(UUID.fromString("20A10010-E8F2-537E-4F6C-D104768A1214"));
+        if(mClassifierService == null){
+            Log.w(TAG, "Custom BLE Service not found");
+            return null;
+        }
+        /*get the read characteristic from the service*/
+        BluetoothGattCharacteristic mReadClassification = mClassifierService.getCharacteristic(UUID.fromString("20A10011-E8F2-537E-4F6C-D104768A1214"));
+        if(mReadClassification == null){
+            Log.w(TAG, "Failed to read characteristic");
+        }
+        return mReadClassification;
     }
 }
