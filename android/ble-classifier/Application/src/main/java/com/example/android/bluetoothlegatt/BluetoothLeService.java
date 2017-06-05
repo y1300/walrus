@@ -130,15 +130,15 @@ public class BluetoothLeService extends Service {
             intent.putExtra(EXTRA_DATA, getStringClassification(classification));
         } catch (Exception e) {
             Log.w(TAG, "Error parsing float: " + e.toString());
-            intent.putExtra(EXTRA_DATA, "No Data");
+            intent.putExtra(EXTRA_DATA, "Invalid data");
         }
         sendBroadcast(intent);
     }
 
     private String getStringClassification(int classification) {
         switch (classification){
-            case -1: return "Not Valid";
-            case 0: return "Press Up";
+            case -1: return "Not valid";
+            case 0: return "Press up";
             default: return "Unknown";
         }
     }
