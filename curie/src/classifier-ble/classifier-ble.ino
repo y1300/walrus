@@ -54,7 +54,7 @@ void setup() {
   while(!Serial) ;    // wait for serial port to connect.
   
   /* Initialise the BLE service */
-  blePeripheral.setLocalName("ExerciseClassifieracce");
+  blePeripheral.setLocalName("ExerciseClassifier");
   blePeripheral.setAdvertisedServiceUuid(classifierService.uuid());
 
   blePeripheral.addAttribute(classifierService);
