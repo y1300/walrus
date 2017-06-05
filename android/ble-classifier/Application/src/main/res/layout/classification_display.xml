@@ -2,19 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Read Char"
-        android:id="@+id/button"
-        android:onClick="onClickRead" />
+
     <TextView
         android:id="@+id/data_value"
         android:layout_width="match_parent"
-        android:layout_height="86dp"
+        android:layout_height="120dp"
         android:text="@string/no_data"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textSize="40sp"
         android:verticalScrollbarPosition="defaultPosition" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickRead"
+        android:text="@string/classification" />
 </LinearLayout>

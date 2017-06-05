@@ -5,7 +5,7 @@
 
 BLEPeripheral blePeripheral;
 BLEService classifierService("20A10010-E8F2-537E-4F6C-D104768A1214");
-BLEFloatCharacteristic classifierCharacteristic("20A10011-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify);
+BLEIntCharacteristic classifierCharacteristic("20A10011-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify);
 
 bool moving = false;                
 bool calibrateOffsets = true;
@@ -15,13 +15,13 @@ unsigned long lastSwitchTime = 0;     // Time of the last switch in 'moving' sta
 unsigned long interruptTime = 0;      // Time of the last interrupt
 unsigned long readingInterval = 75;  // Time between readings when logging, in milliseconds
 const float accelerationMultiplier = 16384; // Value to divide by to get an acceleration in mg
+const float classificationThreshold = 0.8; // Output threshold at which classification is chosen
 
 int ax, ay, az; // Accelerometer values
 float readingsBuffer[50] = {0.0f}; 
 int readingsIndex = 0;
 float normalisedReadings[numInputNodes];
 Network_A *network;
-float latestClassification;
 
 void setup() {
   /* Initialise and calibrate the IMU */
@@ -187,6 +187,17 @@ void normaliseReadings(int diff) {
   }
 }
 
+int resultToClassification(float * result) {
+  int classification = '-1';
+  float maxClassificationValue = 0.0;
+
+  for (int i = 0; i < numOutputNodes; i++) {
+    if (result[i] >= classificationThreshold && result[i] > maxClassificationValue) {
+      classification = i;
+    }
+  }
+  return classification;
+}
 
 /* 
  * Take the current buffer of readings and attempt to classify
@@ -203,7 +214,7 @@ void classifyMovement() {
       Serial.print(result[i]); Serial.print(" ");
     }
     Serial.println("");
-    classifierCharacteristic.setValue(result[0]);
+    classifierCharacteristic.setValue(resultToClassification(result));
     
   } else {
     Serial.println("Too few readings to normalise, not classifying");
