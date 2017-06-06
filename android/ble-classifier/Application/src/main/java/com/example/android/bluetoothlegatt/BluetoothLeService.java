@@ -63,9 +63,6 @@ public class BluetoothLeService extends Service {
     public final static String EXTRA_DATA =
             "com.example.bluetooth.le.EXTRA_DATA";
 
-    public final static UUID UUID_HEART_RATE_MEASUREMENT =
-            UUID.fromString(SampleGattAttributes.HEART_RATE_MEASUREMENT);
-
     // Implements callback methods for GATT events that the app cares about.  For example,
     // connection change and services discovered.
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
@@ -291,24 +288,13 @@ public class BluetoothLeService extends Service {
             return;
         }
 
-        mBluetoothGatt.setCharacteristicNotification(characteristic, true);
-
         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
                 UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+        descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
         mBluetoothGatt.writeDescriptor(descriptor);
-    }
 
-    /**
-     * Retrieves a list of supported GATT services on the connected device. This should be
-     * invoked only after {@code BluetoothGatt#discoverServices()} completes successfully.
-     *
-     * @return A {@code List} of supported services.
-     */
-    public List<BluetoothGattService> getSupportedGattServices() {
-        if (mBluetoothGatt == null) return null;
-
-        return mBluetoothGatt.getServices();
+        mBluetoothGatt.setCharacteristicNotification(characteristic, true);
     }
 
     public void readClassification() {
