@@ -52,12 +52,9 @@ public class DeviceControlActivity extends Activity {
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
-    private TextView mConnectionState;
     private TextView axField;
     private TextView ayField;
     private TextView azField;
-
-    private TextView mDataField;
 
     private String mDeviceName;
     private String mDeviceAddress;
@@ -112,7 +109,7 @@ public class DeviceControlActivity extends Activity {
                 clearUI();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
-                displayGattServices(mBluetoothLeService.getSupportedGattServices());
+                //displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
             }
@@ -154,14 +151,14 @@ public class DeviceControlActivity extends Activity {
     };
 
     private void clearUI() {
-        mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
-        mDataField.setText(R.string.no_data);
+        //mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
+        //mDataField.setText(R.string.no_data);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gatt_services_characteristics);
+        setContentView(R.layout.button_control);
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -169,17 +166,17 @@ public class DeviceControlActivity extends Activity {
 
         // Sets up UI references.
 
-        ((TextView) findViewById(R.id.device_address)).setText(mDeviceAddress);
+        /*((TextView) findViewById(R.id.device_address)).setText(mDeviceAddress);
 
         mGattServicesList = (ExpandableListView) findViewById(R.id.gatt_services_list);
         mGattServicesList.setOnChildClickListener(servicesListClickListner);
         mConnectionState = (TextView) findViewById(R.id.connection_state);
 
         mDataField = (TextView) findViewById(R.id.data_value);
-
-        //axField = (TextView) findViewById(R.id.ax_value);
-        //ayField = (TextView) findViewById(R.id.ay_value);
-        //azField = (TextView) findViewById(R.id.az_value);
+        */
+        axField = (TextView) findViewById(R.id.ax_value);
+        ayField = (TextView) findViewById(R.id.ay_value);
+        azField = (TextView) findViewById(R.id.az_value);
 
         getActionBar().setTitle(mDeviceName);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -243,13 +240,12 @@ public class DeviceControlActivity extends Activity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mConnectionState.setText(resourceId);
+                //mConnectionState.setText(resourceId);
             }
         });
     }
 
     private void displayData(String data) {
-        /*
         if (data != null && data.length() >= 6) {
             String axData = Integer.toString(((data.charAt(data.length()-6) & 0xff) << 8) |
                     (data.charAt(data.length()-5) & 0xff));
@@ -258,9 +254,9 @@ public class DeviceControlActivity extends Activity {
             String azData = Integer.toString(((data.charAt(data.length()-2) & 0xff) << 8) |
                     (data.charAt(data.length()-1) & 0xff));
 
-            axField.setText(axData);//Integer.parseInt(axData, 16));
-            ayField.setText(ayData);//Integer.parseInt(ayData, 16));
-            azField.setText(azData);//Integer.parseInt(azData, 16));
+            axField.setText(data);//Integer.parseInt(axData, 16));
+            ayField.setText(data);//Integer.parseInt(ayData, 16));
+            azField.setText(data);//Integer.parseInt(azData, 16));
         } else {
             Context context = getApplicationContext();
             CharSequence text = "Data length is: " + data.length();
@@ -268,9 +264,6 @@ public class DeviceControlActivity extends Activity {
 
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
-        } */
-        if (data != null) {
-            mDataField.setText(data);
         }
     }
 

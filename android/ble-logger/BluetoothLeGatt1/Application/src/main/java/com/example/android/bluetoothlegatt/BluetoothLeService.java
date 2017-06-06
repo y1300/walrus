@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.UUID;
@@ -318,6 +319,13 @@ public class BluetoothLeService extends Service {
     }
 
     public void readCustomCharacteristic() {
+        Context context = getApplicationContext();
+        CharSequence text = "readCustomCharacteristic";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return;
