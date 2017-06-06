@@ -295,7 +295,7 @@ public class BluetoothLeService extends Service {
 
         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(
                 UUID.fromString(SampleGattAttributes.CLIENT_CHARACTERISTIC_CONFIG));
-        descriptor.setValue(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
+        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         mBluetoothGatt.writeDescriptor(descriptor);
     }
 
@@ -327,7 +327,6 @@ public class BluetoothLeService extends Service {
         if(!mBluetoothGatt.readCharacteristic(mReadClassification)){
             Log.w(TAG, "Failed to read characteristic");
         }
-        setCharacteristicNotification(mReadClassification, true);
         broadcastUpdate(ACTION_DATA_AVAILABLE, mReadClassification);
     }
 
