@@ -28,12 +28,20 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.SimpleExpandableListAdapter;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.ViewSwitcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +60,7 @@ public class DeviceControlActivity extends Activity {
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
 
     private TextView mConnectionState;
-    private TextView mDataField;
+    private TextSwitcher mDataField;
     private String mDeviceName;
     private String mDeviceAddress;
     private ExpandableListView mGattServicesList;
@@ -150,9 +158,22 @@ public class DeviceControlActivity extends Activity {
                 }
     };
 
+    private ViewSwitcher.ViewFactory mFactory = new ViewSwitcher.ViewFactory() {
+
+        @Override
+        public View makeView() {
+
+            TextView t = new TextView(DeviceControlActivity.this);
+            t.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+            t.setGravity(Gravity.CENTER);
+            t.setTextSize(40);
+            return t;
+        }
+    };
+
     private void clearUI() {
         //mGattServicesList.setAdapter((SimpleExpandableListAdapter) null);
-        mDataField.setText(R.string.no_data);
+        mDataField.setText("No data");
     }
 
     @Override
@@ -170,7 +191,19 @@ public class DeviceControlActivity extends Activity {
         mGattServicesList.setOnChildClickListener(servicesListClickListner);
         mConnectionState = (TextView) findViewById(R.id.connection_state);
         */
-        mDataField = (TextView) findViewById(R.id.data_value);
+        mDataField = (TextSwitcher)findViewById(R.id.data_value);
+        mDataField.setFactory(mFactory);
+
+        Animation in = AnimationUtils.loadAnimation(this,
+                android.R.anim.fade_in);
+        in.setDuration(500);
+        in.setStartOffset(1000);
+        Animation out = AnimationUtils.loadAnimation(this,
+                android.R.anim.fade_out);
+        out.setDuration(500);
+
+        mDataField.setInAnimation(in);
+        mDataField.setOutAnimation(out);
 
         getActionBar().setTitle(mDeviceName);
         getActionBar().setDisplayHomeAsUpEnabled(true);
