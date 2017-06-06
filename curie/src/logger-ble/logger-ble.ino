@@ -3,7 +3,7 @@
 
 BLEPeripheral blePeripheral;
 BLEService accelerometerService("19B10010-E8F2-537E-4F6C-D104768A1214");
-BLECharacteristic accelerometerCharacteristic("19B10011-E8F2-537E-4F6C-D104768A1214", BLERead, 6);
+BLECharacteristic accelerometerCharacteristic("19B10011-E8F2-537E-4F6C-D104768A1214", BLERead | BLENotify, 6);
 unsigned long readingInterval = 75;  // Time between readings when logging
 
 int ax, ay, az; // Accelerometer values
