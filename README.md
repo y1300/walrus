@@ -2,10 +2,6 @@
 "Classification using an Artificial Neural Network running on an Intel Curie/Genuino 101"
 Starting from Walrus's BEng Individual Project, Chen moves forward to explore ways to reduce the memory consumption, so as to increase the size of the network on the same memory to improve classification accuracy.
 
-## Why walrus?
-
-[This is why](https://imgur.com/gallery/GUnt3yw)
-
 ## Dependencies
 
 An Intel Curie.
