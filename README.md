@@ -1,9 +1,6 @@
 # WALRUS
-Exercise classification using an Artificial Neural Network running on an Intel Curie/Genuino 101, for my BEng Individual Project.
-
-## Why walrus?
-
-[This is why](https://imgur.com/gallery/GUnt3yw)
+"Classification using an Artificial Neural Network running on an Intel Curie/Genuino 101"
+Starting from Walrus's BEng Individual Project, Chen moves forward to explore ways to reduce the memory consumption, so as to increase the size of the network on the same memory to improve classification accuracy.
 
 ## Dependencies
 
@@ -12,8 +9,8 @@ Bluetooth Low Energy (BLE) capable Android phone
 
 - [Arduino IDE (v1.6 or later)](https://www.arduino.cc/en/Main/Software)
 - [Curie IMU (library)](https://www.arduino.cc/en/Reference/CurieIMU)
-- [ArduinoANN](http://robotics.hobbizine.com/arduinoann.zip)
-- [Python 2](https://www.python.org/downloads/) (Hoping to switch to Python 3 soon...)
+- [ArduinoANN](http://robotics.hobbizine.com/arduinoann.html)
+- [Python 3.4](https://www.python.org/downloads/) (start to change to Python 3)
 - [GCC 6](https://gcc.gnu.org/gcc-6/)
 - [Catch](https://github.com/philsquared/Catch)
 
