@@ -150,7 +150,7 @@ cmake-build-debug/
 
 # Test files used during I/O unit tests etc
 
-network/test_network_config.h
+test_network_config.h
 linux/test/test_normalised_log_file.txt
 
 ###################################

@@ -61,7 +61,7 @@ if l.returncode == 1:
 print "Compiled all object files"
 
 # Link the new-network object files together into an executable
-o = subprocess.Popen(["g++", "linux/new-network.o", "network/network-linux.o", "network/network-saveload-linux.o", "-o", "network/new-network", "-std=c++11"]);
+o = subprocess.Popen(["g++", "linux/new-network.o", "network/network-linux.o", "network/network-saveload-linux.o", "-o", "linux/new-network", "-std=c++11"]);
 o.wait();
 if o.returncode == 1:
     sys.exit(1)
